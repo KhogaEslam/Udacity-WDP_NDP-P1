@@ -36,7 +36,7 @@ const getSectionPosition = (section) => {
 
 const isSectionInViewPort = (section) => {
     const currentSectionPosition = getSectionPosition(section);
-    return currentSectionPosition.top < 50 && currentSectionPosition.bottom > 50;
+    return currentSectionPosition.top < 50 && currentSectionPosition.bottom > 50; // Near Top
 }
 
 const removeActiveClassFromSection = (section) => {
@@ -65,7 +65,10 @@ const addHomeItem = () => {
     homeAnchorElement.className = 'menu__link';
     homeAnchorElement.textContent = 'Home';
     homeAnchorElement.setAttribute('href', '#navbar__list');
-    homeAnchorElement.onclick = () => window.scroll(0, 0);
+    homeAnchorElement.onclick = () => window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 
     // Add Anchor Element To List Item Element,
     // then add Home Element to Nav Bar
@@ -117,7 +120,7 @@ const navBarItemsBuilder = () => {
 navBarItemsBuilder();
 
 // Add class 'active' to section when near top of viewport
-
+// Set sections as active
 const handleSectionsActiveState = () => {
 
     sectionsList.forEach(section => {
@@ -133,7 +136,25 @@ const handleSectionsActiveState = () => {
 window.addEventListener('scroll', handleSectionsActiveState);
 
 // Scroll to anchor ID using scrollTO event
+// Scroll to section on link click
+const scrollToSection = () => {
+    document.querySelectorAll('a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
 
+            const section = document.querySelector(this.getAttribute('href'));
+            const topPosition = getSectionPosition(section)?.top + window.pageYOffset
+
+            window.scrollTo({
+                top: topPosition,
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
+// Call the method to execute
+scrollToSection();
 
 /**
  * End Main Functions
@@ -143,8 +164,7 @@ window.addEventListener('scroll', handleSectionsActiveState);
 
 // Build menu 
 
-// Scroll to section on link click
 
-// Set sections as active
+
 
 
