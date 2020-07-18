@@ -18,6 +18,10 @@
  * 
 */
 
+// Getting `Nav Bar List` Element.
+const navBarElement = document.querySelector('#navbar__list');
+// Gettiing Sections Elements.
+const sectionsList = document.querySelectorAll('section');
 
 /**
  * End Global Variables
@@ -34,7 +38,67 @@
 */
 
 // build the nav
+const addHomeItem = () => {
+    
+    // Create Item Element & add it's attributes
+    const homeItem = document.createElement('li');
+    homeItem.className = 'navbar__item';
 
+    // Create ItemAnchor Element & add it's attributes
+    const homeAnchorElement = document.createElement('a');
+    homeAnchorElement.className = 'menu__link';
+    homeAnchorElement.textContent = 'Home';
+    homeAnchorElement.setAttribute('href', '#navbar__list');
+    homeAnchorElement.onclick = () => window.scroll(0, 0);
+
+    // Add Anchor Element To List Item Element,
+    // then add Home Element to Nav Bar
+    homeItem.appendChild(homeAnchorElement);
+    navBarElement.appendChild(homeItem);
+}
+
+// Call the method to execute
+addHomeItem();
+
+const navBarItemsBuilder = () => {
+    // Create temp container.
+    const tempDoc = document.createDocumentFragment();
+
+    // Initialize some variables
+    let sectionID;
+    let sectionDataNav;
+    let navBarItem;
+
+    let itemAnchorElement;
+
+    // Loop through `sections`
+    sectionsList.forEach(section => {
+        // get required section's data
+        sectionID = section.id;
+        sectionDataNav = section.getAttribute('data-nav');
+
+        // Create Item Element & add it's attributes
+        navBarItem = document.createElement('li');
+        navBarItem.className = 'navbar__item';
+
+        // Create ItemAnchor Element & add it's attributes
+        itemAnchorElement = document.createElement('a');
+        itemAnchorElement.className = 'menu__link';
+        itemAnchorElement.setAttribute('href', `#${sectionID}`);
+        itemAnchorElement.textContent = sectionDataNav;
+
+        // Add Anchor Element To List Item Element,
+        // then add Item Element to container
+        navBarItem.appendChild(itemAnchorElement);
+        tempDoc.appendChild(navBarItem);
+    });
+
+    // add that container to Nav Bar List
+    navBarElement.appendChild(tempDoc);
+}
+
+// Call the method to execute
+navBarItemsBuilder();
 
 // Add class 'active' to section when near top of viewport
 
