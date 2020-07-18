@@ -29,7 +29,23 @@ const sectionsList = document.querySelectorAll('section');
  * 
 */
 
+// Get current position of current section
+const getSectionPosition = (section) => {
+    return section?.getBoundingClientRect();
+}
 
+const isSectionInViewPort = (section) => {
+    const currentSectionPosition = getSectionPosition(section);
+    return currentSectionPosition.top < 50 && currentSectionPosition.bottom > 50;
+}
+
+const removeActiveClassFromSection = (section) => {
+    section.classList.remove('your-active-class')
+}
+
+const addActiveClassToSection = (section) => {
+    section.classList.add('your-active-class');
+}
 
 /**
  * End Helper Functions
@@ -102,6 +118,19 @@ navBarItemsBuilder();
 
 // Add class 'active' to section when near top of viewport
 
+const handleSectionsActiveState = () => {
+
+    sectionsList.forEach(section => {
+
+        removeActiveClassFromSection(section);
+        
+        if (isSectionInViewPort(section)) {
+            addActiveClassToSection(section);
+        }
+    });
+}
+
+window.addEventListener('scroll', handleSectionsActiveState);
 
 // Scroll to anchor ID using scrollTO event
 
