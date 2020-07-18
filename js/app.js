@@ -47,12 +47,44 @@ const addActiveClassToSection = (section) => {
     section.classList.add('your-active-class');
 }
 
+// Handle Back to top button
+const handleBackToTopButton = () => {
+    const backToTopBtn = document.querySelector("#backToTop");
+
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        backToTopBtn.style.display = "block";
+    } else {
+        backToTopBtn.style.display = "none";
+    }
+}
+
+const backToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// Switch Classes for Nav Bar
+const handleNavBarActiveState = (hrefAttr) => {
+    const navBarListItemsAnchors = document.querySelectorAll('#navbar__list .navbar__item .menu__link');
+
+    navBarListItemsAnchors.forEach(anchor => {
+        anchor.classList.remove('navbar__active');
+
+        if ('#' + hrefAttr === anchor.getAttribute('href') || hrefAttr === anchor.getAttribute('href')) {
+            anchor.classList.add('navbar__active');
+        }
+    });
+}
+
 /**
  * End Helper Functions
  * Begin Main Functions
  * 
 */
 
+// Build menu 
 // build the nav
 const addHomeItem = () => {
     
@@ -62,13 +94,10 @@ const addHomeItem = () => {
 
     // Create ItemAnchor Element & add it's attributes
     const homeAnchorElement = document.createElement('a');
-    homeAnchorElement.className = 'menu__link';
+    homeAnchorElement.className = 'menu__link navbar__active';
     homeAnchorElement.textContent = 'Home';
     homeAnchorElement.setAttribute('href', '#navbar__list');
-    homeAnchorElement.onclick = () => window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    homeAnchorElement.onclick = () => backToTop();
 
     // Add Anchor Element To List Item Element,
     // then add Home Element to Nav Bar
@@ -122,15 +151,23 @@ navBarItemsBuilder();
 // Add class 'active' to section when near top of viewport
 // Set sections as active
 const handleSectionsActiveState = () => {
+    handleBackToTopButton();
+
+    let activeSectionID = '#navbar__list';
 
     sectionsList.forEach(section => {
 
         removeActiveClassFromSection(section);
         
         if (isSectionInViewPort(section)) {
+
             addActiveClassToSection(section);
+
+            activeSectionID = section.id;
         }
     });
+
+    handleNavBarActiveState(activeSectionID);
 }
 
 window.addEventListener('scroll', handleSectionsActiveState);
@@ -142,13 +179,17 @@ const scrollToSection = () => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
 
-            const section = document.querySelector(this.getAttribute('href'));
+            const hrefAttr = this.getAttribute('href');
+
+            const section = document.querySelector(hrefAttr);
             const topPosition = getSectionPosition(section)?.top + window.pageYOffset
 
             window.scrollTo({
                 top: topPosition,
                 behavior: 'smooth'
             });
+
+            handleNavBarActiveState(hrefAttr);
         });
     });
 }
@@ -161,10 +202,3 @@ scrollToSection();
  * Begin Events
  * 
 */
-
-// Build menu 
-
-
-
-
-
